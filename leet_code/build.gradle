@@ -1,0 +1,26 @@
+ext {
+    junitVersion = '4.12'
+    fastJsonVersion = '1.2.70'
+    apacheVersion = '3.8.1'
+}
+
+version = '1.0.0'
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+dependencies {
+    compile(
+        //spring框架相关
+        "org.springframework.boot:spring-boot-starter-web:${springBootVersion}",
+        "com.alibaba:fastjson:${fastJsonVersion}",
+        //工具
+        "org.apache.commons:commons-lang3:${apacheVersion}",
+    )
+
+    testCompile(
+        "junit:junit:${junitVersion}",
+        "org.springframework.boot:spring-boot-starter-test:${springBootVersion}",
+    )
+}

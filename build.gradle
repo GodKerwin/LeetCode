@@ -1,0 +1,34 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.6.RELEASE'
+    }
+    repositories {
+        maven {
+            url 'http://maven.aliyun.com/nexus/content/groups/public/'
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+//配置所有项目
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    group = 'com.xul'
+    
+    sourceCompatibility = '1.8'
+}
+
+//构建依赖
+subprojects {
+    repositories {
+        maven {
+            url 'http://maven.aliyun.com/nexus/content/groups/public/'
+        }
+        mavenCentral()
+        mavenLocal()
+    }
+}
+
