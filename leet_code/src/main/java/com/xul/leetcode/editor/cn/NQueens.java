@@ -40,13 +40,7 @@
 
 package com.xul.leetcode.editor.cn;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.CollectionUtils;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class NQueens {
 
@@ -58,44 +52,50 @@ public class NQueens {
     class Solution {
         public List<List<String>> solveNQueens(int n) {
             List<List<String>> result = new ArrayList<>();
-            List<String> solve = new ArrayList<>();
+            int[] queen = new int[n];
+            Set<Integer> position = new HashSet<>(); //每行下的位置
+            Set<Integer> left = new HashSet<>(); //左侧斜线
+            Set<Integer> right = new HashSet<>(); //右侧斜线
 
-
-            List<Integer> position = new ArrayList<>(); //每行下的位置
-            List<String> notPosition = new ArrayList<>();
-
-
-            for (int i = 1; i <= n; i++) { //每行
-                for (int j = 1; j <= n; j++) { //每列
-                    if (!CollectionUtils.isEmpty(notPosition)) {
-                        String notStr = notPosition.get(i - 1);
-                        if (StringUtils.isNotEmpty(notStr)) {
-                            List<String> not = Arrays.stream(notStr.split(",")).collect(Collectors.toList());
-                            if (not.contains(j + "")) {
-                                continue;
-                            }
-                        }
-                    }
-                    position.add(j);
-                    if (i == 1) {
-                        notPosition.add(j + "");
-                    }
-                    //判断哪些格子不能下
-                    for (int k = i + 1; k <= n; k++) {
-                        String line = "";
-                        if (i - (k - i) > 0) {
-                            line += "," + (i - (k - i));
-                        }
-                        if (i + (k - i) <= n) {
-                            line += "," + (i + (k - i));
-                        }
-                        if (StringUtils.isNotEmpty(line)) {
-                            notPosition.add(line);
-                        }
-                    }
-                }
-            }
+            calc(n, 0, queen, position, left, right, result);
             return result;
+        }
+
+        public void calc(int n, int row, int[] queen, Set<Integer> position, Set<Integer> left, Set<Integer> right, List<List<String>> result) {
+            if (row == n) {
+                result.add(geneSolve(queen, n));
+            }
+            for (int i = 0; i < n; i++) { //每列
+                if (position.contains(i)) {
+                    continue;
+                }
+                if (left.contains(row + i)) {
+                    continue;
+                }
+                if (right.contains(row - i)) {
+                    continue;
+                }
+                queen[row] = i;
+                position.add(i);
+                left.add(row + i);
+                right.add(row - i);
+                calc(n, row + 1, queen, position, left, right, result);
+                queen[row] = -1;
+                position.remove(i);
+                left.remove(row + i);
+                right.remove(row - i);
+            }
+        }
+
+        public List<String> geneSolve(int[] queen, int n) {
+            List<String> solve = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                char[] item = new char[n];
+                Arrays.fill(item, '.');
+                item[queen[i]] = 'Q';
+                solve.add(new String(item));
+            }
+            return solve;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)

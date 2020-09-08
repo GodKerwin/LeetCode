@@ -16,8 +16,7 @@
 
 package com.xul.leetcode.editor.cn;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.xul.bean.ListNode;
 
 public class AddTwoNumbers {
 
@@ -36,20 +35,22 @@ public class AddTwoNumbers {
      * }
      */
     class Solution {
-
-        public class ListNode {
-            int val;
-            ListNode next;
-
-            ListNode(int x) {
-                val = x;
-            }
-        }
-
         public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-            List<Integer> list1 = new ArrayList<>();
-            List<Integer> list2 = new ArrayList<>();
-            return null;
+            ListNode root = new ListNode(0);
+            ListNode node = root;
+            int carry = 0;
+            while (l1 != null || l2 != null || carry != 0) {
+                int i1 = l1 == null ? 0 : l1.val;
+                int i2 = l2 == null ? 0 : l2.val;
+                int num = i1 + i2 + carry;
+                carry = num / 10;
+                num = num % 10;
+                l1 = l1 == null ? null : l1.next;
+                l2 = l2 == null ? null : l2.next;
+                node.next = new ListNode(num);
+                node = node.next;
+            }
+            return root.next;
         }
     }
 //leetcode submit region end(Prohibit modification and deletion)
